@@ -67,7 +67,7 @@ class OpenvSwitchNode(DockerNode):
 
         # Add bash shell
         self._shells['sh'] = DockerShell(
-            self.container_id, 'sh', '/ .*#'
+            self.container_id, 'sh', '[^/n].*?#'
         )
 
     def notify_post_build(self):

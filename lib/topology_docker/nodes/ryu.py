@@ -79,7 +79,7 @@ class RyuControllerNode(DockerNode):
 
         # Add bash shell
         self._shells['bash'] = DockerShell(
-            self.container_id, 'sh -c "TERM=dumb bash"', 'root@.*:.*# '
+            self.container_id, 'sh', '[^/n].*?# '
         )
 
     def notify_post_build(self):

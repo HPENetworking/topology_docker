@@ -225,18 +225,18 @@ class OpenSwitchNode(DockerNode):
 
         # Add vtysh (default) and bash shell
         self._shells['vtysh'] = DockerShell(
-            self.container_id, 'vtysh', '(^|\n)switch(\([\-a-zA-Z0-9]*\))?#'
+            self.container_id, 'vtysh', '[^/n].*?#'
         )
         self._shells['bash'] = DockerShell(
-            self.container_id, 'sh -c "TERM=dumb bash"', 'bash-.*#'
+            self.container_id, 'sh', '[^/n].*?#'
         )
         self._shells['bash_swns'] = DockerShell(
             self.container_id,
-            'sh -c "TERM=dumb ip netns exec swns bash"',
-            'bash-.*#'
+            'sh -c "ip netns exec swns bash"',
+            '[^/n].*?#'
         )
         self._shells['vsctl'] = DockerShell(
-            self.container_id, 'sh -c "TERM=dumb bash"', 'bash-.*#',
+            self.container_id, 'sh', '[^/n].*?#',
             prefix='ovs-vsctl ', timeout=60
         )
 
