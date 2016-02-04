@@ -40,7 +40,7 @@ class HostNode(DockerNode):
 
         super(HostNode, self).__init__(identifier, image=image, **kwargs)
         self._shells['bash'] = DockerShell(
-            self.container_id, 'sh -c "TERM=dumb bash"', 'root@.*:.*# '
+            self.container_id, 'sh', '[^/n].*?# '
         )
 
 

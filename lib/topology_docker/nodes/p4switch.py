@@ -67,14 +67,14 @@ class P4SwitchNode(DockerNode):
 
         # Add bash shell
         self._shells['bash'] = DockerShell(
-            self.container_id, 'sh -c "TERM=dumb bash"', 'root@.*:.*# '
+            self.container_id, 'sh', '[^/n].*?# '
         )
 
         # Add SAI shell (https://github.com/p4lang/switchsai)
         self._shells['sai'] = DockerShell(
             self.container_id,
-            'sh -c "TERM=dumb bash"',
-            'root@.*:.*# ',
+            'sh',
+            '[^/n].*?# ',
             '/p4factory/targets/switch/tests/pd_thrift/switch_sai_rpc-remote '
             '-h localhost:9092 '
         )
@@ -82,8 +82,8 @@ class P4SwitchNode(DockerNode):
         # Add switchapi shell (https://github.com/p4lang/switchapi)
         self._shells['api'] = DockerShell(
             self.container_id,
-            'sh -c "TERM=dumb bash"',
-            'root@.*:.*# ',
+            'sh',
+            '[^/n].*?# ',
             '/p4factory/targets/switch/tests/pd_thrift/switch_api_rpc-remote '
             '-h localhost:9091 '
         )
@@ -91,22 +91,22 @@ class P4SwitchNode(DockerNode):
         # Add PD shells
         self._shells['pd_conn_mgr'] = DockerShell(
             self.container_id,
-            'sh -c "TERM=dumb bash"',
-            'root@.*:.*# ',
+            'sh',
+            '[^/n].*?# ',
             '/p4factory/targets/switch/tests/pd_thrift/conn_mgr-remote '
             '-h localhost:9090 '
         )
         self._shells['pd_mc'] = DockerShell(
             self.container_id,
-            'sh -c "TERM=dumb bash"',
-            'root@.*:.*# ',
+            'sh',
+            '[^/n].*?# ',
             '/p4factory/targets/switch/tests/pd_thrift/mc-remote '
             '-h localhost:9090 '
         )
         self._shells['pd_p4'] = DockerShell(
             self.container_id,
-            'sh -c "TERM=dumb bash"',
-            'root@.*:.*# ',
+            'sh',
+            '[^/n].*?# ',
             '/p4factory/targets/switch/tests/pd_thrift/dc-remote '
             '-h localhost:9090 '
         )

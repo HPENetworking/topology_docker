@@ -55,7 +55,8 @@ class DockerShell(object):
                 'docker exec -i -t {} {}'.format(
                     self._container, self._shell
                 ),
-                echo=False
+                echo=False,
+                env={'TERM': 'dumb'}
             )
             # Cut output at first prompt
             self._spawn.expect(self._prompt, timeout=self._timeout)
