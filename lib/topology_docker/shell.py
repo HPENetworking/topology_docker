@@ -22,63 +22,31 @@ Docker shell helper class module.
 from __future__ import unicode_literals, absolute_import
 from __future__ import print_function, division
 
-from pexpect import spawn
+from topology.platforms.shell import PExpectShell
 
 
-class DockerShell(object):
+class DockerShell(PExpectShell):
     """
-    Shell helper class.
+    Shell class for Docker nodes.
 
-    This class wrapps a ``docker exec`` call to a given shell command and
-    manages a pexpect spawn object for it.
-
-    It implementes the ``__call__`` method that allows to call the objects
-    as it were the contained shell.
+    See :class:`topology.platforms.shell.PExpectShell`.
     """
 
     def __init__(
-            self, container, shell, prompt,
-            prefix=None, timeout=None, encoding='utf-8'):
+        self, container, shell, prompt, initial_command=None,
+        initial_prompt=None, password=None, password_match='[pP]assword:',
+        prefix=None, timeout=None, encoding='utf-8'
+    ):
         self._container = container
         self._shell = shell
-        self._prompt = prompt
-        self._prefix = prefix
-        self._timeout = timeout or -1
-        self._encoding = encoding
-        self._spawn = None
 
-    def __call__(self, command):
+        super(DockerShell, self).__init__(
+            prompt, initial_command, initial_prompt, password, password_match,
+            prefix, timeout, encoding
+        )
 
-        # Lazy-spawn
-        if self._spawn is None:
-            self._spawn = spawn(
-                'docker exec -i -t {} {}'.format(
-                    self._container, self._shell
-                ),
-                echo=False
-            )
-            # Cut output at first prompt
-            self._spawn.expect(self._prompt, timeout=self._timeout)
-
-        # Prefix command if required
-        if self._prefix is not None:
-            command = self._prefix + command
-
-        self._spawn.sendline(command)
-        self._spawn.expect(self._prompt, timeout=self._timeout)
-
-        # Convert binary representation to unicode using encoding
-        raw = self._spawn.before.decode(self._encoding)
-
-        # Remove leading and trailing whitespaces and normalize newlines
-        lines = raw.strip().replace('\r', '').splitlines()
-        del raw
-
-        # Remove echo command if it exists
-        if lines and lines[0].strip() == command.strip():
-            lines.pop(0)
-
-        return '\n'.join(lines)
+    def _get_connect_command(self):
+        return 'docker exec -i -t {} {}'.format(self._container, self._shell)
 
 
 __all__ = ['DockerShell']
