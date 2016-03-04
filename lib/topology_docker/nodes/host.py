@@ -16,32 +16,8 @@
 # under the License.
 
 """
-Simple host Topology Docker Node using Ubuntu.
+topology_docker.nodes module entry point.
 """
 
 from __future__ import unicode_literals, absolute_import
 from __future__ import print_function, division
-
-from topology_docker.node import DockerNode
-from topology_docker.shell import DockerShell
-
-
-class HostNode(DockerNode):
-    """
-    Simple host node for the Topology Docker platform engine.
-
-    This base host loads an ubuntu image (by default) and has bash as the
-    default shell.
-
-    See :class:`topology_docker.node.DockerNode`.
-    """
-
-    def __init__(self, identifier, image='ubuntu:latest', **kwargs):
-
-        super(HostNode, self).__init__(identifier, image=image, **kwargs)
-        self._shells['bash'] = DockerShell(
-            self.container_id, 'sh -c "TERM=dumb bash"', 'root@.*:.*# '
-        )
-
-
-__all__ = ['HostNode']
