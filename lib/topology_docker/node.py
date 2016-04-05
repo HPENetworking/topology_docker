@@ -22,8 +22,8 @@ topology_docker base node module.
 from __future__ import unicode_literals, absolute_import
 from __future__ import print_function, division
 
-import logging
 from json import loads
+from logging import getLogger
 from shlex import split as shsplit
 from subprocess import check_output
 from abc import ABCMeta, abstractmethod
@@ -34,7 +34,7 @@ from six import add_metaclass
 from topology.platforms.base import CommonNode
 
 
-log = logging.getLogger(__name__)
+log = getLogger(__name__)
 
 
 @add_metaclass(ABCMeta)
@@ -43,19 +43,17 @@ class DockerNode(CommonNode):
     An instance of this class will create a detached Docker container.
 
     :param str identifier: The unique identifier of the node.
-    :param str image: The image to run on this node.
+    :param str image: The image to run on this node, in the
+     form ``repository:tag``.
     :param str registry: Docker registry to pull image from.
     :param str command: The command to run when the container is brought up.
-    :param list binds: List of directories to bind for this container in the
-     form:
+    :param str binds: Directories to bind for this container separated by a
+     ``;`` in the form:
 
      ::
 
-        [
-            '/tmp:/tmp',
-            '/dev/log:/dev/log',
-            '/sys/fs/cgroup:/sys/fs/cgroup'
-        ]
+        '/tmp:/tmp;/dev/log:/dev/log;/sys/fs/cgroup:/sys/fs/cgroup'
+
     :param str network_mode: Network mode for this container.
     """
 
@@ -63,7 +61,7 @@ class DockerNode(CommonNode):
     def __init__(
             self, identifier,
             image='ubuntu:latest', registry=None, command='bash',
-            binds=None, network_mode='none', **kwargs):
+            binds=None, network_mode='none', hostname=None, **kwargs):
 
         super(DockerNode, self).__init__(identifier, **kwargs)
 
@@ -71,10 +69,15 @@ class DockerNode(CommonNode):
         self._image = image
         self._registry = registry
         self._command = command
-        self._client = Client()
+        self._hostname = hostname
+        self._client = Client(version='auto')
 
         # Autopull docker image if necessary
         self._autopull()
+
+        # Create host config
+        if binds is not None:
+            binds = binds.split(';')
 
         self._host_config = self._client.create_host_config(
             # Container is given access to all devices
@@ -84,12 +87,14 @@ class DockerNode(CommonNode):
             binds=binds
         )
 
+        # Create container
         self.container_id = self._client.create_container(
             image=self._image,
             command=self._command,
             name='{}_{}'.format(identifier, str(id(self))),
             detach=True,
             tty=True,
+            hostname=self._hostname,
             host_config=self._host_config
         )['Id']
 
@@ -224,11 +229,18 @@ class DockerNode(CommonNode):
 
         :param str command: The command to execute.
         """
-        return check_output(shsplit(
+        log.debug(
+            '[{}]._docker_exec({}) ::'.format(self.container_id, command)
+        )
+
+        response = check_output(shsplit(
             'docker exec {container_id} {command}'.format(
                 container_id=self.container_id, command=command.strip()
             )
         )).decode('utf8')
+
+        log.debug(response)
+        return response
 
 
 __all__ = ['DockerNode']
