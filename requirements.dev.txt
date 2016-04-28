@@ -1,21 +1,11 @@
-# Debugging
-ipdb
-
-# Coding standard
 flake8
 pep8-naming
-
-# Pytest framework
 pytest===2.8.4
 pytest-cov
-pytest-logging
-
-# Documentation
 sphinx
 sphinx_rtd_theme
 sphinxcontrib-plantuml
 autoapi
-
-# Topology libraries
+ipdb
 topology_lib_ip
 topology_lib_ping
