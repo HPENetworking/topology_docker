@@ -44,11 +44,7 @@ Nodes
             'openswitch = topology_docker.nodes.openswitch:OpenSwitchNode'
         ]
     }
-:image: Docker image to use for this node. You can run ``docker images`` to
-        find the images that are available in your docker installation. To
-        specify an image in this attribute, make sure to add the value for the
-        ``REPOSITORY`` column and the value for the ``TAG`` column separated by
-        a colon, like this: ``image="ubuntu:latest"``.
+:image: Docker image to use for this node.
 
 Ports
 -----
