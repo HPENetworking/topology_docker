@@ -121,6 +121,14 @@ class DockerPlatform(BasePlatform):
         node_a, port_a = nodeport_a
         node_b, port_b = nodeport_b
 
+        node_type_a = node_a.metadata.get('type', 'host')
+        node_type_b = node_b.metadata.get('type', 'host')
+        if node_type_a == 'oobmhost' or node_type_b == 'oobmhost':
+            self.nmlbiport_iface_map[port_a.identifier]['created'] = True
+            self.nmlbiport_iface_map[port_b.identifier]['created'] = True
+            return
+
+
         # Get enodes
         enode_a = self.nmlnode_node_map[node_a.identifier]
         enode_b = self.nmlnode_node_map[node_b.identifier]
