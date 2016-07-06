@@ -83,7 +83,21 @@ class DockerNode(CommonNode):
      argument.
     """
 
-    _network_config = None
+    _network_config = {
+        'default_category': 'front_panel',
+        'mapping': {
+            'oobm': {
+                'netns': None,
+                'managed_by': 'docker',
+                'prefix': ''
+            },
+            'front_panel': {
+                'netns': 'front_panel',
+                'managed_by': 'platform',
+                'prefix': ''
+            }
+        }
+    }
 
     @abstractmethod
     def __init__(
