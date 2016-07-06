@@ -164,6 +164,10 @@ class DockerNode(CommonNode):
             host_config=self._host_config
         )['Id']
 
+    @classmethod
+    def get_network_config(cls):
+        return cls._network_config
+
     @property
     def image(self):
         return self._image
