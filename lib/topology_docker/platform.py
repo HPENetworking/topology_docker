@@ -128,7 +128,6 @@ class DockerPlatform(BasePlatform):
             self.nmlbiport_iface_map[port_b.identifier]['created'] = True
             return
 
-
         # Get enodes
         enode_a = self.nmlnode_node_map[node_a.identifier]
         enode_b = self.nmlnode_node_map[node_b.identifier]
