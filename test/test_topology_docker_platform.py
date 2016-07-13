@@ -233,7 +233,11 @@ def test_unlink_relink():
     connection is asserted in all stages.
     """
 
-    topology = "[identifier=thelink] hs1:a -- hs2:b"
+    topology = """\
+    [type=host] hs1
+    [type=host] hs2
+    [identifier=thelink] hs1:a -- hs2:b
+    """
 
     mgr = TopologyManager(engine='docker')
     mgr.parse(topology)

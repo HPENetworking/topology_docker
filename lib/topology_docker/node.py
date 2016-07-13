@@ -94,14 +94,25 @@ class DockerNode(CommonNode):
         if binds is not None:
             container_binds.extend(binds.split(';'))
 
-        # Create host config
-        self._host_config = self._client.create_host_config(
-            # Container is given access to all devices
-            privileged=True,
-            # Avoid connecting to host bridge, usually docker0
-            network_mode=network_mode,
-            binds=container_binds
-        )
+        if (str(self.metadata['type']) == 'host' or
+           str(self.metadata['type']) == 'oobmhost'):
+            # Create host config
+            self._host_config = self._client.create_host_config(
+                # Container is given access to all devices
+                cap_add=['ALL'],
+                # Avoid connecting to host bridge, usually docker0
+                network_mode=network_mode,
+                binds=container_binds
+            )
+        else:
+            # Create host config
+            self._host_config = self._client.create_host_config(
+                # Container is given access to all devices
+                privileged=True,
+                # Avoid connecting to host bridge, usually docker0
+                network_mode=network_mode,
+                binds=container_binds
+            )
 
         # Create container
         self.container_id = self._client.create_container(
