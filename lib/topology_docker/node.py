@@ -182,12 +182,12 @@ class DockerNode(CommonNode):
         :param str command: The command to execute.
         """
         log.debug(
-            '[{}]._docker_exec(\'{}\') ::'.format(self._container_id, command)
+            '[{}]._docker_exec(\'{}\') ::'.format(self.container_id, command)
         )
 
         response = check_output(shsplit(
             'docker exec {container_id} {command}'.format(
-                container_id=self._container_id, command=command.strip()
+                container_id=self.container_id, command=command.strip()
             )
         )).decode('utf8')
 
