@@ -1,5 +1,6 @@
 six
 docker-py
 
+-e git+https://github.com/HPENetworking/topology.git@master#egg=topology
 # Uncomment when topology 1.8 is released
 # topology>=1.8.0
