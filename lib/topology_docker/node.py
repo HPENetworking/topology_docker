@@ -61,13 +61,39 @@ class DockerNode(CommonNode):
         '/tmp:/tmp;/dev/log:/dev/log;/sys/fs/cgroup:/sys/fs/cgroup'
 
     :param str network_mode: Network mode for this container.
+
+     ::
+
+        ['environment_variable=value']
+
+     or as a dictionary in the following format:
+
+     ::
+
+        {'environment_variable': 'value'}
+
+    :type environment: list or dict
+
+    Read only public attributes:
+
+    :var str image: Name of the Docker image being used by this node.
+     Same as the ``image`` keyword argument.
+    :var str container_id: Unique container identifier assigned by the Docker
+     daemon in the form of a hash.
+    :var str container_name: Unique container name assigned by the framework in
+     the form ``{identifier}_{pid}_{timestamp}``.
+    :var str shared_dir: Share directory in the host for this container. Always
+     ``/tmp/topology/{container_name}``.
+    :var str shared_dir_mount: Directory inside the container where the
+     ``shared_dir`` is mounted. Same as the ``shared_dir_mount`` keyword
     """
 
     @abstractmethod
     def __init__(
             self, identifier,
             image='ubuntu:latest', registry=None, command='bash',
-            binds=None, network_mode='none', hostname=None, **kwargs):
+            binds=None, network_mode='none', hostname=None,
+            environment=None, **kwargs):
 
         super(DockerNode, self).__init__(identifier, **kwargs)
 
@@ -76,6 +102,7 @@ class DockerNode(CommonNode):
         self._registry = registry
         self._command = command
         self._hostname = hostname
+        self._environment = environment
         self._client = Client(version='auto')
 
         # Autopull docker image if necessary
@@ -122,7 +149,8 @@ class DockerNode(CommonNode):
             detach=True,
             tty=True,
             hostname=self._hostname,
-            host_config=self._host_config
+            host_config=self._host_config,
+            environment=self._environment
         )['Id']
 
     def _autopull(self):
