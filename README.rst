@@ -14,6 +14,13 @@ Documentation
 Changelog
 =========
 
+1.1.1
+-----
+
+**Fix**
+
+- Removing fixed dependencies.
+
 1.1.0
 -----
 
