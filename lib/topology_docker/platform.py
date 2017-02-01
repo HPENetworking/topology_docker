@@ -123,7 +123,14 @@ class DockerPlatform(BasePlatform):
 
         node_type_a = node_a.metadata.get('type', 'host')
         node_type_b = node_b.metadata.get('type', 'host')
-        if node_type_a == 'oobmhost' or node_type_b == 'oobmhost':
+        port_name_a = port_a.metadata.get('force_name', None)
+        port_name_b = port_b.metadata.get('force_name', None)
+        port_type_a = port_a.metadata.get('force_type', None)
+        port_type_b = port_b.metadata.get('force_type', None)
+
+        if (node_type_a == 'oobmhost' or node_type_b == 'oobmhost' or
+                port_name_a == 'oobm' or port_name_b == 'oobm' or
+                port_type_a == 'oobm' or port_type_b == 'oobm'):
             self.nmlbiport_iface_map[port_a.identifier]['created'] = True
             self.nmlbiport_iface_map[port_b.identifier]['created'] = True
             return
