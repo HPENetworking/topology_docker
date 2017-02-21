@@ -14,6 +14,13 @@ Documentation
 Changelog
 =========
 
+1.1.2
+-----
+
+**Fix**
+
+- Avoid creating oobm links in intermediate devices.
+
 1.1.1
 -----
 
