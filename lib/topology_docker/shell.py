@@ -60,6 +60,71 @@ class DockerBashShell(DockerExecMixin, PExpectBashShell):
     Specialized ``docker exec`` shell that will run and setup a bash
     interactive session.
     """
+    def _setup_shell(self, connection=None):
+        """
+        Overriden setup function that will disable the echo on the device on
+        the shell and set a pexpect-safe prompt.
+        """
+        spawn = self._get_connection(connection)
+
+        # Wait initial prompt
+        spawn.expect(
+            self._initial_prompt, timeout=self._timeout
+        )
+
+        # Remove echo
+        spawn.sendline('stty -echo')
+        spawn.expect(
+            self._initial_prompt, timeout=self._timeout
+        )
+
+        # Change prompt to a pexpect secure prompt
+        spawn.sendline(
+            'export PS1={}'.format(PExpectBashShell.FORCED_PROMPT)
+        )
+        self._prompt = PExpectBashShell.FORCED_PROMPT
+
+        # Brute force solving prompt setting bug
+        spawn.expect(
+            self._prompt, timeout=self._timeout
+        )
+
+        spawn.sendline(
+            'export PS1={}; clear'.format(PExpectBashShell.FORCED_PROMPT)
+        )
+        spawn.expect(
+            self._prompt, timeout=self._timeout
+        )
+
+        spawn.sendline(
+            'export PS1={}'.format(PExpectBashShell.FORCED_PROMPT)
+        )
+        spawn.expect(
+            self._prompt, timeout=self._timeout
+        )
+
+        spawn.sendline(
+            'export PS1={}'.format(PExpectBashShell.FORCED_PROMPT)
+        )
+        spawn.expect(
+            self._prompt, timeout=self._timeout
+        )
+        spawn.sendline(
+            'export PS1={};clear'.format(PExpectBashShell.FORCED_PROMPT)
+        )
+        spawn.expect(
+            self._prompt, timeout=self._timeout
+        )
+        spawn.sendline(
+            'export PS1={}'.format(PExpectBashShell.FORCED_PROMPT)
+        )
+        spawn.expect(
+            self._prompt, timeout=self._timeout
+        )
+
+        spawn.sendline(
+            'export PS1={};'.format(PExpectBashShell.FORCED_PROMPT)
+        )
 
 
 __all__ = ['DockerShell', 'DockerBashShell']
