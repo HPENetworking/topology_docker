@@ -14,6 +14,13 @@ Documentation
 Changelog
 =========
 
+1.1.4
+-----
+
+**Fix**
+
+- Removing workaround for bash prompts.
+
 1.1.3
 -----
 
