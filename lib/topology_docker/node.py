@@ -76,6 +76,8 @@ class DockerNode(CommonNode):
 
     Read only public attributes:
 
+    :param int http_timeout: HTTP request timeout for docker-py client,
+     defaults to 180
     :var str image: Name of the Docker image being used by this node.
      Same as the ``image`` keyword argument.
     :var str container_id: Unique container identifier assigned by the Docker
@@ -90,10 +92,10 @@ class DockerNode(CommonNode):
 
     @abstractmethod
     def __init__(
-            self, identifier,
-            image='ubuntu:latest', registry=None, command='bash',
-            binds=None, network_mode='none', hostname=None,
-            environment=None, **kwargs):
+        self, identifier, image='ubuntu:latest', registry=None, command='bash',
+        binds=None, network_mode='none', hostname=None, environment=None,
+        http_timeout=180, **kwargs
+    ):
 
         super(DockerNode, self).__init__(identifier, **kwargs)
 
@@ -103,7 +105,7 @@ class DockerNode(CommonNode):
         self._command = command
         self._hostname = hostname
         self._environment = environment
-        self._client = Client(version='auto')
+        self._client = Client(version='auto', timeout=http_timeout)
 
         # Autopull docker image if necessary
         self._autopull()
