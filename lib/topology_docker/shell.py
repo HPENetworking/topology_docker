@@ -60,6 +60,9 @@ class DockerBashShell(DockerExecMixin, PExpectBashShell):
     Specialized ``docker exec`` shell that will run and setup a bash
     interactive session.
     """
+    def __init__(self, *args, **kwargs):
+        super(DockerBashShell, self).__init__(*args, **kwargs)
+        self.delay_after_echo = 1
 
 
 __all__ = ['DockerShell', 'DockerBashShell']
