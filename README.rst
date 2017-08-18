@@ -28,6 +28,14 @@ Changelog
 =========
 
 
+1.1.6 (2017-08-18)
+------------------
+
+New
+~~~
+- Configures shell delay to 1 second. [Javier Peralta]
+
+
 1.1.5 (2017-07-25)
 ------------------
 
@@ -500,5 +508,3 @@ Other
   Jenkins Perez]
 
   new: dev: Added a Toxin node for packet generation.
-
-
