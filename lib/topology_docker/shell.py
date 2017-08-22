@@ -80,12 +80,13 @@ class DockerBashShell(DockerExecMixin, PExpectBashShell):
 
             # Successfully set prompt
             if index == 0:
-                spawn.sendline(' ')
+                print('Matched Forced prompt')
                 break
 
             # Echo is not off
             elif index == 1:
                 spawn.sendline('stty -echo')
+                print('Matched export PS1 prompt')
                 sleep(self._delay_after_echo_off)
                 spawn.expect(
                     self._prompt, timeout=self._timeout
@@ -94,13 +95,27 @@ class DockerBashShell(DockerExecMixin, PExpectBashShell):
 
             # Prompt is not properly set
             elif index == 2:
+                print('Matched TIMEOUT')
                 spawn.sendline('export PS1={}'.format(self._prompt))
 
             else:
-                raise('Unexpected prompt appears while setting bash prompt')
+                raise Exception(
+                    'Unexpected prompt appears while setting bash prompt'
+                )
 
         else:
-            raise('Unable to set up bash after 10 attempts')
+            raise Exception('Unable to set up bash after 10 attempts')
 
+        for num in range(attempts):
+            index = spawn.expect(
+                [self._prompt, TIMEOUT], timeout=self._timeout
+            )
+            if index == 0:
+                continue
+            else:
+                break
+        else:
+            raise Exception('Unable to consume all extra bash prompts')
+        spawn.sendline(' ')
 
 __all__ = ['DockerShell', 'DockerBashShell']
