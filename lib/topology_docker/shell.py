@@ -22,6 +22,8 @@ Docker shell helper class module.
 from __future__ import unicode_literals, absolute_import
 from __future__ import print_function, division
 
+from time import sleep
+from pexpect import TIMEOUT
 from topology.platforms.shell import PExpectShell, PExpectBashShell
 
 
@@ -62,7 +64,43 @@ class DockerBashShell(DockerExecMixin, PExpectBashShell):
     """
     def __init__(self, *args, **kwargs):
         super(DockerBashShell, self).__init__(*args, **kwargs)
-        self.delay_after_echo = 1
+        self.delay_after_echo = 0.5
+
+    def _setup_shell(self, connection=None):
+        super(DockerBashShell, self)._setup_shell(connection)
+        spawn = self._get_connection(connection)
+        attempts = 10
+        expected_matches = [
+            r'(?<!export PS1=){}'.format(self._prompt),
+            r'export PS1=.*',
+            TIMEOUT
+        ]
+        for num in range(attempts):
+            index = spawn.expect(expected_matches, timeout=self._timeout)
+
+            # Successfully set prompt
+            if index == 0:
+                spawn.sendline(' ')
+                break
+
+            # Echo is not off
+            elif index == 1:
+                spawn.sendline('stty -echo')
+                sleep(self._delay_after_echo_off)
+                spawn.expect(
+                    self._prompt, timeout=self._timeout
+                )
+                spawn.sendline('export PS1={}'.format(self._prompt))
+
+            # Prompt is not properly set
+            elif index == 2:
+                spawn.sendline('export PS1={}'.format(self._prompt))
+
+            else:
+                raise('Unexpected prompt appears while setting bash prompt')
+
+        else:
+            raise('Unable to set up bash after 10 attempts')
 
 
 __all__ = ['DockerShell', 'DockerBashShell']
