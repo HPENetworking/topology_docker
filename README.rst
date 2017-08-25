@@ -27,6 +27,15 @@ License
 Changelog
 =========
 
+1.1.7 (2017-08-25)
+------------------
+
+New
+~~~
+- Added logic to deal with unmatched bash prompts. [Javier Peralta]
+- Add a more intelligent method to set bash. [Javier Peralta]
+
+
 
 1.1.6 (2017-08-18)
 ------------------
