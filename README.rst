@@ -24,8 +24,24 @@ License
    specific language governing permissions and limitations
    under the License.
 
+
 Changelog
 =========
+
+
+1.1.8 (2017-09-04)
+------------------
+
+Fix
+~~~
+- Reduce timeout. [Pablo Saenz]
+
+Other
+~~~~~
+- Merge pull request #17 from saenzpa/reduce_timeout. [Pablo Saenz]
+
+  fix: dev: Reduce timeout.
+
 
 1.1.7 (2017-08-25)
 ------------------
@@ -34,15 +50,21 @@ New
 ~~~
 - Added logic to deal with unmatched bash prompts. [Javier Peralta]
 - Add a more intelligent method to set bash. [Javier Peralta]
-
-
-
-1.1.6 (2017-08-18)
-------------------
-
-New
-~~~
 - Configures shell delay to 1 second. [Javier Peralta]
+
+Changes
+~~~~~~~
+- Bumping version to 1.1.7. [Javier Peralta]
+- Bumping version to 1.1.6. [Javier Peralta]
+
+Other
+~~~~~
+- Merge pull request #16 from saenzpa/set-bash. [Pablo Saenz]
+
+  new: dev: Add a more intelligent method to set bash
+- Merge pull request #15 from saenzpa/echo-delay. [Pablo Saenz]
+
+  new: dev: Configures shell delay to 1 second
 
 
 1.1.5 (2017-07-25)
@@ -517,3 +539,5 @@ Other
   Jenkins Perez]
 
   new: dev: Added a Toxin node for packet generation.
+
+
