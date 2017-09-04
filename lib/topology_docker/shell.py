@@ -107,9 +107,8 @@ class DockerBashShell(DockerExecMixin, PExpectBashShell):
             raise Exception('Unable to set up bash after 10 attempts')
 
         for num in range(attempts):
-            index = spawn.expect(
-                [self._prompt, TIMEOUT], timeout=self._timeout
-            )
+            # This is an expected timeout, so we want to reduce time waited.
+            index = spawn.expect([self._prompt, TIMEOUT], timeout=5)
             if index == 0:
                 continue
             else:
