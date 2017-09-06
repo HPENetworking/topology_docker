@@ -67,8 +67,8 @@ class DockerBashShell(DockerExecMixin, PExpectBashShell):
         self.delay_after_echo = 0.5
 
     def _setup_shell(self, connection=None):
-        super(DockerBashShell, self)._setup_shell(connection)
-        spawn = self._get_connection(connection)
+        super(DockerBashShell, self)._setup_shell(connection=connection)
+        spawn = self._get_connection(connection=connection)
         attempts = 10
         expected_matches = [
             r'(?<!export PS1=){}'.format(self._prompt),
@@ -116,5 +116,6 @@ class DockerBashShell(DockerExecMixin, PExpectBashShell):
         else:
             raise Exception('Unable to consume all extra bash prompts')
         spawn.sendline(' ')
+
 
 __all__ = ['DockerShell', 'DockerBashShell']
