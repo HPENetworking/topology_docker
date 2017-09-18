@@ -25,6 +25,8 @@ from __future__ import print_function, division
 import logging
 from traceback import format_exc
 from collections import OrderedDict
+from subprocess import check_output
+from shlex import split
 
 from topology.platforms.base import BasePlatform
 from topology.platforms.utils import NodeLoader
@@ -245,6 +247,27 @@ class DockerPlatform(BasePlatform):
                 privileged_cmd('rm /var/run/netns/{pid}', pid=enode._pid)
             except:
                 log.error(format_exc())
+        from pytest import config
+        log_dir_path = config.getoption('--topology-log-dir')
+
+        if log_dir_path:
+            with open(
+                '{}/docker_daemon.log'.format(log_dir_path),
+                'w'
+            ) as daemon_log:
+                try:
+                    daemon_log.write(
+                        check_output(
+                            split(
+                                'journalctl -u docker.service --no-pager'
+                            )
+                        ).decode('utf-8', errors='ignore')
+                    )
+
+                except Exception as error:
+                    log.warning(
+                        'Unable to pull docker logs: {}'.format(str(error))
+                    )
 
     def rollback(self, stage, enodes, exception):
         """
