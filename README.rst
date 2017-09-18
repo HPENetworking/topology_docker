@@ -24,9 +24,30 @@ License
    specific language governing permissions and limitations
    under the License.
 
-
 Changelog
 =========
+
+
+1.2.0 (2017-09-18)
+------------------
+
+Changes
+~~~~~~~
+- Pulling logs from docker daemon. [Pablo Saenz]
+
+Other
+~~~~~
+- Merge pull request #18 from saenzpa/docker_logs. [Pablo Saenz]
+
+  chg: dev: Pulling logs from docker daemon.
+
+
+1.1.9 (2017-09-07)
+------------------
+
+Fix
+~~~
+- Calling keyword argument correctly. [Diego Antonio Hurtado Pimentel]
 
 
 1.1.8 (2017-09-04)
