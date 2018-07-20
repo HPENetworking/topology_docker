@@ -161,7 +161,7 @@ class DockerNode(CommonNode):
         """
         # Search for image in available images
         for tags in [img['RepoTags'] for img in self._client.images()]:
-            if self._image in tags:
+            if tags and self._image in tags:
                 return
 
         # Determine image parts
