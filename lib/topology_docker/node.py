@@ -410,7 +410,7 @@ class DockerNode(CommonNode):
         )
         category_config = network_config['mapping'][category]
 
-        if category_config['managed_by'] is 'docker':
+        if category_config['managed_by'] == 'docker':
             netname = category_config.get(
                 'connect_to',
                 '{}_{}'.format(self._container_name, category)
