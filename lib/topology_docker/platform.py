@@ -45,7 +45,7 @@ class DockerPlatform(BasePlatform):
     See :class:`topology.platforms.platform.BasePlatform` for more information.
     """
 
-    def __init__(self, timestamp, nmlmanager):
+    def __init__(self, timestamp, nmlmanager, **kwargs):
 
         self.node_loader = NodeLoader(
             'docker', api_version='1.0', base_class=DockerNode
