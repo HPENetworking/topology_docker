@@ -1,18 +1,34 @@
-===================================
-Docker Platform Engine for Topology
-===================================
+===============
+Topology Docker
+===============
 
-Docker based Platform Engine plugin for the Topology Modular Framework.
+Topology Docker its a plugin (called a Platform Engine) for the Topology
+Framework that allows to build a topology using Docker containers.
 
 
 Documentation
 =============
 
-    http://topology-docker.rtfd.org/
+    https://topology-docker.readthedocs.io/
 
 
 Changelog
 =========
+
+1.8.0
+-----
+
+**Changes**
+
+- Allow platform to receive options, so it is compatible with the new Topology
+  1.10.0 "options" feature. [David Diaz]
+
+
+1.7.0
+-----
+
+- Release changelog lost in time.
+
 
 1.6.0
 -----
