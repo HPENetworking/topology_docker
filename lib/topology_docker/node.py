@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2015-2018 Hewlett Packard Enterprise Development LP
+# Copyright (C) 2015-2018-2023 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ topology_docker base node module.
 from __future__ import unicode_literals, absolute_import
 from __future__ import print_function, division
 
-from os import getpid
+from os import getpid, getenv
 from json import loads
 from os.path import join
 from logging import getLogger
@@ -125,7 +125,8 @@ class DockerNode(CommonNode):
         self._command = command
         self._hostname = hostname
         self._environment = environment
-        self._client = APIClient(version='auto')
+        docker_socket= getenv('DOCKER_HOST', default='unix:///var/run/docker.sock')
+        self._client = APIClient(version='auto', base_url=f'tcp://{docker_socket}')
 
         self._container_name = '{identifier}_{pid}_{timestamp}'.format(
             identifier=identifier, pid=getpid(),

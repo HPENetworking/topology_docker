@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2015-2018 Hewlett Packard Enterprise Development LP
+# Copyright (C) 2015-2018-2023 Hewlett Packard Enterprise Development LP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ from __future__ import unicode_literals, absolute_import
 from __future__ import print_function, division
 
 import logging
+from os import getenv
 from traceback import format_exc
 from collections import OrderedDict
 from docker import APIClient
@@ -332,7 +333,8 @@ class DockerPlatform(BasePlatform):
                 log.error(format_exc())
 
         # Remove all docker-managed networks
-        dockerclient = APIClient(version='auto')
+        docker_socket= getenv('DOCKER_HOST', default='unix:///var/run/docker.sock')
+        dockerclient = APIClient(version='auto', base_url=f'tcp://{docker_socket}')
         for netname in networks_to_remove:
             dockerclient.remove_network(net_id=netname)
 
