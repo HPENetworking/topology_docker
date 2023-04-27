@@ -88,6 +88,7 @@ class DockerNode(CommonNode):
      docker-py's ``create_host_config()`` low-level API call.
     :param dict create_container_kwargs: Extra kwargs arguments to pass to
      docker-py's ``create_container()`` low-level API call.
+    :param str docker_host: Docker daemon URI
 
     Read only public attributes:
 
@@ -115,6 +116,7 @@ class DockerNode(CommonNode):
             shared_dir_mount='/var/topology',
             create_host_config_kwargs=None,
             create_container_kwargs=None,
+            docker_host=None,
             **kwargs):
 
         super(DockerNode, self).__init__(identifier, **kwargs)
@@ -125,7 +127,7 @@ class DockerNode(CommonNode):
         self._command = command
         self._hostname = hostname
         self._environment = environment
-        self._client = APIClient(version='auto')
+        self._client = APIClient(version='auto', base_url=docker_host)
 
         self._container_name = '{identifier}_{pid}_{timestamp}'.format(
             identifier=identifier, pid=getpid(),

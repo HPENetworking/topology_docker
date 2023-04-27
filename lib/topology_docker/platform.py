@@ -43,9 +43,11 @@ class DockerPlatform(BasePlatform):
     Plugin to build a topology using Docker.
 
     See :class:`topology.platforms.platform.BasePlatform` for more information.
+
+    :param str docker_host: Docker daemon URI
     """
 
-    def __init__(self, timestamp, nmlmanager, **kwargs):
+    def __init__(self, timestamp, nmlmanager, docker_host=None, **kwargs):
 
         self.node_loader = NodeLoader(
             'docker', api_version='1.0', base_class=DockerNode
@@ -55,6 +57,7 @@ class DockerPlatform(BasePlatform):
         self.nmlbiport_iface_map = OrderedDict()
         self.nmlbilink_nmlbiports_map = OrderedDict()
         self.available_node_types = self.node_loader.load_nodes()
+        self._docker_host = docker_host
 
         # Create netns folder
         privileged_cmd('mkdir -p /var/run/netns')
@@ -77,7 +80,7 @@ class DockerPlatform(BasePlatform):
 
         # Create instance of node type and start
         enode = self.available_node_types[node_type](
-            node.identifier, **node.metadata
+            node.identifier, docker_host=self._docker_host, **node.metadata
         )
 
         # Register node
@@ -332,7 +335,7 @@ class DockerPlatform(BasePlatform):
                 log.error(format_exc())
 
         # Remove all docker-managed networks
-        dockerclient = APIClient(version='auto')
+        dockerclient = APIClient(version='auto', base_url=self._docker_host)
         for netname in networks_to_remove:
             dockerclient.remove_network(net_id=netname)
 
