@@ -23,10 +23,10 @@ from __future__ import unicode_literals, absolute_import
 from __future__ import print_function, division
 
 import logging
+from warnings import warn
 from os import getuid, devnull, makedirs
 from shlex import split as shsplit
 from subprocess import call, check_call
-
 
 log = logging.getLogger(__name__)
 
@@ -84,13 +84,13 @@ def cmd_prefix():
         return cmd_prefix.prefix
 
     if getuid() == 0:
-        # We better do not allow root
-        raise RuntimeError(
-            'Please do not run as root. '
+        warn(
+            'Running as root user is not recommended due to the '
+            'Principle of Least Privilege. '
             'Please configure the ip command for root execution.'
         )
-        # cmd_prefix.prefix = ''
-        # return cmd_prefix.prefix
+        cmd_prefix.prefix = ''
+        return cmd_prefix.prefix
 
     with open(devnull, 'w') as f:
         cmd = shsplit('sudo --non-interactive ip link show')
