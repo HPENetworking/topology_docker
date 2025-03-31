@@ -128,7 +128,7 @@ class DockerNode(CommonNode):
         self._client = APIClient(version='auto')
 
         self._container_name = '{identifier}_{pid}_{timestamp}'.format(
-            identifier=identifier, pid=getpid(),
+            identifier=identifier.replace('>', '.'), pid=getpid(),
             timestamp=datetime.now().isoformat().replace(':', '-')
         )
         self._shared_dir_base = shared_dir_base
